@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mybg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:background="@color/my_primary" />
+
+    <!--Top Header Layout-->
+    <LinearLayout
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:padding="16dp">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:src="@drawable/baseline_arrow_back_24" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:padding="6dp"
+               />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:layout_below="@+id/topbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp">
+
+            <!--Top Profile Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+               >
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp">
+            <LinearLayout
+                android:paddingVertical="20dp"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+
+                    <ImageView
+                        android:src="@drawable/smkbisa"
+                        android:layout_width="150dp"
+                        android:layout_height="90dp"
+                        android:scaleType="centerCrop"
+                         />
+
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/profileNama"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Syauqan Wafiqi"
+                        android:textColor="#424242"
+                        android:textSize="21sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/profileNISN"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Android Developer"
+                        android:textAlignment="center"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+
+
+            <!--Bootom Cards with sections-->
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:id="@+id/personalinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <!--Contact Details-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/circularborder"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Personal Information"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingRight="8dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/circular_grey_bordersolid"
+                                android:padding="10dp"
+                                android:src="@drawable/baseline_credit_card_24" />
+
+                            <TextView
+                                android:id="@+id/profileNik"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:text="NIK"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center_vertical"
+                            android:paddingRight="8dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/circular_grey_bordersolid"
+                                android:padding="10dp"
+                                android:src="@drawable/baseline_alternate_email_24" />
+
+                            <TextView
+                                android:id="@+id/profileTempatTanggalLahir"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:text="Tempat Tanggal Lahir"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center_vertical"
+                            android:paddingRight="8dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/circular_grey_bordersolid"
+                                android:padding="10dp"
+                                android:src="@drawable/baseline_alternate_email_24" />
+
+                            <TextView
+                                android:id="@+id/profileGender"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:text="Gender"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!--Skills Details-->
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/circularborder"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Credential"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingRight="8dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circular_grey_bordersolid"
+                        android:padding="10dp"
+                        android:src="@drawable/baseline_credit_card_24" />
+
+                    <EditText
+                        android:id="@+id/profileEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="Email"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingRight="8dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circular_grey_bordersolid"
+                        android:padding="10dp"
+                        android:src="@drawable/baseline_credit_card_24" />
+
+                    <EditText
+                        android:id="@+id/profileUsename"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="Usename"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/success"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="SAVE CHANGE"
+                app:cornerRadius="10dp"/>
+            <com.google.android.material.button.MaterialButton
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/my_primary"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="RESET PASSWORD"
+                app:cornerRadius="10dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/profileLogout"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/my_primary"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="LOGOUT"
+                app:cornerRadius="10dp"/>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</RelativeLayout>

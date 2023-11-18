@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mybg"
+    tools:context=".MainActivity"
+    android:paddingHorizontal="20dp"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selemat Pagi"
+        />
+    <TextView
+
+        android:textStyle="bold"
+        android:textSize="15pt"
+        android:text="Syauqan Wafiqi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_marginVertical="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:backgroundTint="@color/my_primary"
+
+        >
+        <LinearLayout
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:text="Senin, 23 Oct 2023"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="SMKN 3 Pamekasan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+            <TextView
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:text="JL. Panglegur"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <com.google.android.material.card.MaterialCardView
+
+        android:backgroundTint="#d2ffe8"
+        app:strokeColor="#D1F4E3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+        <TextView
+            android:drawableRight="@drawable/centang1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+
+            android:textColor="#2f8b5d"
+            android:text="Anda Telah Abasen Hari Ini | "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+            <TextView
+                android:textStyle="bold"
+                android:textColor="#2f8b5d"
+                android:text="13:00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+        <HorizontalScrollView
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+        <com.google.android.material.button.MaterialButton
+
+            android:id="@+id/dashboardbtnprofile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:backgroundTint="#198754"
+            android:drawableTop="@drawable/centang1"
+            android:drawablePadding="0dp"
+            android:padding="15dp"
+            android:text="Profile"
+            android:textColor="@color/black"
+            app:cornerRadius="10dp" />
+
+        <View android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_weight="1"
+                    android:backgroundTint="#ffc107"
+                    android:drawableTop="@drawable/centang1"
+                    android:drawablePadding="0dp"
+                    android:padding="15dp"
+                    android:text="Presensi"
+                    android:textColor="@color/black"
+                    app:cornerRadius="10dp" />
+
+                <View android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_weight="1"
+                    android:backgroundTint="#0dcaf0"
+                    android:drawableTop="@drawable/centang1"
+                    android:drawablePadding="0dp"
+                    android:padding="15dp"
+                    android:text="Riwayat"
+                    app:cornerRadius="10dp" />
+
+                <View android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+        <com.google.android.material.button.MaterialButton
+            app:cornerRadius="10dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textColor="@color/black"
+            android:text="Izin"
+            android:padding="15dp"
+            android:drawablePadding="0dp"
+            android:backgroundTint="#ced4da"
+            android:layout_alignParentBottom="true"
+            android:drawableTop="@drawable/centang1" />
+                <View android:layout_width="5dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/dashboardRiwayatKelas"
+                    app:cornerRadius="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:textColor="@color/black"
+                    android:text="Riwayat Kelas"
+                    android:padding="15dp"
+                    android:drawablePadding="0dp"
+                    android:backgroundTint="#ced4da"
+                    android:layout_alignParentBottom="true"
+                    android:drawableTop="@drawable/centang1" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Riwayat Absensi"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:textStyle="italic"
+            android:textColor="@color/my_primary"
+            android:textAlignment="textEnd"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="view more >"
+            />
+    </LinearLayout>
+
+</LinearLayout>
