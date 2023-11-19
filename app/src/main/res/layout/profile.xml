@@ -77,6 +77,7 @@
 
             <!--Top Profile Section -->
             <LinearLayout
+                android:id="@+id/profileLinearGender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -324,6 +325,7 @@
         </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
+               android:id="@+id/profilebtnupdate"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/success"
                 android:layout_width="match_parent"

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ public class Profile extends AppCompatActivity {
     TextView NIK, Namalengkap, tetala, gender,NISN;
     EditText Email,Username;
 
-    MaterialButton btnLogout;
+    MaterialButton btnLogout, btnUpdate;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,15 +43,25 @@ public class Profile extends AppCompatActivity {
         Email = findViewById(R.id.profileEmail);
         Username = findViewById(R.id.profileUsename);
         btnLogout = findViewById(R.id.profileLogout);
+        btnUpdate = findViewById(R.id.profilebtnupdate);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sessionManager.clearSession(Profile.this);
                 Intent i = new Intent(Profile.this, Login.class);
-// set the new task and clear flags
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String edit_email = Email.getText().toString();
+                String username = Username.getText().toString();
+                updateProfileAction(edit_email,username);
+
             }
         });
 
@@ -58,8 +69,48 @@ public class Profile extends AppCompatActivity {
         profileAction();
     }
 
+    private void updateProfileAction(String email,String username) {
+        AndroidNetworking.post(URI.url+"update-profile")
+                .addBodyParameter("token", sessionManager.getString(Profile.this,"token",""))
+                .addBodyParameter("email", sessionManager.getString(Profile.this,"email",""))
+                .addBodyParameter("req_email", email)
+                .addBodyParameter("name", username)
+
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Handle response dari server
+                            boolean success = response.getBoolean("req_status");
+                            String message = response.getString("message");
+
+                            if (success) {
+                                Log.d("response", "onResponse: "+response);
+                                JSONObject data = response.getJSONObject("data");
+                                sessionManager.saveString(Profile.this,"email",data.getString("email"));
+                                Toasty.success(Profile.this,"UPDATE DATA BERHHASIL",Toasty.LENGTH_SHORT,true).show();
+
+                            } else {
+                                // Login gagal, tampilkan pesan error
+                                Toasty.error(Profile.this,message, Toast.LENGTH_SHORT,true).show();
+                            }
+                        } catch (JSONException e) {
+                            Toasty.error(Profile.this,"Terjadi Kesalahan", Toast.LENGTH_SHORT,true).show();
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Toasty.error(Profile.this,anError.getErrorCode()+": Terjadi Kesalahan", Toast.LENGTH_SHORT,true);
+                    }
+
+                });
+    }
+
     private  void profileAction(){
-        Log.d("email Tes", "profileAction: "+sessionManager.getString(Profile.this,"email","kosonog"));
         AndroidNetworking.post(URI.url+"profile")
                 .addBodyParameter("token", sessionManager.getString(Profile.this,"token",""))
                 .addBodyParameter("email", sessionManager.getString(Profile.this,"email",""))
@@ -77,11 +128,18 @@ public class Profile extends AppCompatActivity {
                                 Log.d("response", "onResponse: "+response);
                                 JSONObject data = response.getJSONObject("data");
                                 Log.d("response", "onResponse: "+data);
-                                NIK.setText(data.getString("nik"));
+                                if (sessionManager.getString(Profile.this,"role","").equalsIgnoreCase("guru")){
+                                    NIK.setText(data.getString("nip"));
+                                    NISN.setText(data.getString("nuptk"));
+                                    LinearLayout Lgn = findViewById(R.id.profileLinearGender);
+                                    Lgn.setVisibility(View.GONE);
+                                }else {
+                                    NIK.setText(data.getString("nik"));
+                                    NISN.setText(data.getString("nisn"));
+                                    gender.setText( data.getString("gender").equalsIgnoreCase("L") ? "Laki-Laki" : "Perempuan" );
+                                }
                                 Namalengkap.setText(data.getString("namaLengkap"));
-                                NISN.setText(data.getString("nisn"));
                                 tetala.setText(data.getString("tempatLahir")+", "+data.getString("tglLahir"));
-                                gender.setText( data.getString("gender").equalsIgnoreCase("L") ? "Laki-Laki" : "Perempuan" );
                                 Username.setText(data.getString("name"));
                                 Email.setText(data.getString("email"));
                             } else {

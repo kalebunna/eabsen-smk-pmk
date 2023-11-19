@@ -33,7 +33,7 @@
             android:textColor="@color/white"/>
         <androidx.appcompat.widget.SearchView
             android:id="@+id/kelaslistCariBuku"
-            app:queryHint="Cari Data Buku"
+            app:queryHint="Cari Data Kelas"
             app:iconifiedByDefault="false"
             android:background="@drawable/circular_grey_bordersolid"
             android:layout_width="match_parent"

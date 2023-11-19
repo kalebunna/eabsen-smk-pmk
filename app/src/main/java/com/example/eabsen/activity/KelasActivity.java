@@ -1,8 +1,11 @@
 package com.example.eabsen.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,6 +19,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.eabsen.API.URI;
+import com.example.eabsen.Login;
 import com.example.eabsen.Profile;
 import com.example.eabsen.R;
 import com.example.eabsen.adapter.KelasAdapter;
@@ -49,6 +53,15 @@ public class KelasActivity extends AppCompatActivity {
 
         kelasAdapter = new KelasAdapter(KelasActivity.this, filteredBookList);
         listView.setAdapter(kelasAdapter);
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent In = new Intent(KelasActivity.this, KelasPresensiActivity.class);
+                startActivity(In);
+            }
+        });
 
         setupSearchView();
         fetchDataFromApi();
