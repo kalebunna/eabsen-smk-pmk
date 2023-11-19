@@ -6,7 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -32,6 +33,7 @@
         <activity android:name=".Login"/>
         <activity android:name=".activity.KelasActivity"/>
         <activity android:name=".activity.KelasPresensiActivity"/>
+        <activity android:name=".activity.RiwayatPresensiSiswaActivity"/>
     </application>
 
 </manifest>

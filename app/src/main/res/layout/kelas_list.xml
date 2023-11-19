@@ -40,7 +40,6 @@
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
-
     <androidx.cardview.widget.CardView
         android:backgroundTint="@color/white"
         android:layout_width="match_parent"

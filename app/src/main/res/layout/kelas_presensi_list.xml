@@ -21,7 +21,7 @@
                 android:backgroundTint="@color/mybg"
                 android:layout_marginVertical="30dp"
                 android:layout_marginHorizontal="20dp"
-                android:id="@+id/kelaslistCariBuku"
+                android:id="@+id/kelasPresensiCari"
                 app:queryHint="Cari Data Siswa"
                 app:iconifiedByDefault="false"
                 android:background="@drawable/circular_grey_bordersolid"

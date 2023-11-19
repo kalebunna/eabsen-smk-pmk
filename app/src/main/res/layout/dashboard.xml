@@ -153,6 +153,7 @@
             android:background="@android:color/transparent" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/DashboardBtnRiwayat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"

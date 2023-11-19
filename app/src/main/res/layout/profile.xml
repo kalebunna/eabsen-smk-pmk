@@ -53,8 +53,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerInParent="true"
-                android:padding="6dp"
-               />
+                android:padding="6dp" />
 
 
         </RelativeLayout>
@@ -64,8 +63,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:layout_below="@+id/topbar">
+        android:layout_below="@+id/topbar"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,67 +80,67 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical"
-               >
+                android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:cardCornerRadius="20dp"
+                    android:backgroundTint="@color/white"
                     app:cardElevation="0dp">
-            <LinearLayout
-                android:paddingVertical="20dp"
-                android:gravity="center_horizontal"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
 
+                    <LinearLayout
 
-                    <ImageView
-                        android:src="@drawable/smkbisa"
-                        android:layout_width="150dp"
-                        android:layout_height="90dp"
-                        android:scaleType="centerCrop"
-                         />
-
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/profileNama"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Syauqan Wafiqi"
-                        android:textColor="#424242"
-                        android:textSize="21sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/profileNISN"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Android Developer"
-                        android:textAlignment="center"
-                        android:textSize="14sp" />
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingVertical="20dp">
 
 
-                </LinearLayout>
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="150dp"
+                            android:layout_height="90dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/smkbisa" />
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/profileNama"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:text="Syauqan Wafiqi"
+                                android:textColor="#424242"
+                                android:textSize="21sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/profileNISN"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Android Developer"
+                                android:textAlignment="center"
+                                android:textSize="14sp" />
+
+
+                        </LinearLayout>
+                    </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
 
-
             <!--Bootom Cards with sections-->
             <LinearLayout
-                android:layout_marginTop="20dp"
                 android:id="@+id/personalinfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
 
@@ -248,106 +247,110 @@
 
             </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/circularborder"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Credential"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:layout_marginTop="20dp"
+                android:background="@drawable/circularborder"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingRight="8dp">
+                    android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/circular_grey_bordersolid"
-                        android:padding="10dp"
-                        android:src="@drawable/baseline_credit_card_24" />
-
-                    <EditText
-                        android:id="@+id/profileEmail"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Email"
-                        android:textSize="15sp" />
+                        android:text="Credential"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingRight="8dp">
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/circular_grey_bordersolid"
-                        android:padding="10dp"
-                        android:src="@drawable/baseline_credit_card_24" />
-
-                    <EditText
-                        android:id="@+id/profileUsename"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Usename"
-                        android:textSize="15sp" />
+                        android:gravity="center_vertical"
+                        android:paddingRight="8dp">
 
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circular_grey_bordersolid"
+                            android:padding="10dp"
+                            android:src="@drawable/baseline_credit_card_24" />
+
+                        <EditText
+                            android:id="@+id/profileEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:text="Email"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingRight="8dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circular_grey_bordersolid"
+                            android:padding="10dp"
+                            android:src="@drawable/baseline_credit_card_24" />
+
+                        <EditText
+                            android:id="@+id/profileUsename"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:text="Usename"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
                 </LinearLayout>
+
             </LinearLayout>
 
-        </LinearLayout>
-
             <com.google.android.material.button.MaterialButton
-               android:id="@+id/profilebtnupdate"
+               android:textColor="@color/white"
+                android:id="@+id/profilebtnupdate"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/success"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
                 android:text="SAVE CHANGE"
-                app:cornerRadius="10dp"/>
+                app:cornerRadius="10dp" />
+
             <com.google.android.material.button.MaterialButton
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/my_primary"
+                android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/infoColor"
                 android:text="RESET PASSWORD"
-                app:cornerRadius="10dp"/>
+                app:cornerRadius="10dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/profileLogout"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/my_primary"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/warningColor"
                 android:text="LOGOUT"
-                app:cornerRadius="10dp"/>
+                app:cornerRadius="10dp" />
         </LinearLayout>
 
 

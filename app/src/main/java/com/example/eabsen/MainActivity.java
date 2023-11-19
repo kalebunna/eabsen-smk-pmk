@@ -1,9 +1,12 @@
 package com.example.eabsen;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.format.Formatter;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,21 +22,37 @@ import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.eabsen.API.URI;
 import com.example.eabsen.activity.KelasActivity;
 import com.example.eabsen.activity.KelasPresensiActivity;
+import com.example.eabsen.activity.RiwayatPresensiSiswaActivity;
 import com.google.android.material.button.MaterialButton;
 
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import com.example.eabsen.tools.sessionManager;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_LOCATION_PERMISSION = 1;
+    private static final int MY_CAMERA_PERMISSION_CODE = 100;
+    private static final int CAMERA_REQUEST = 1888;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    MaterialButton btnProfile,btnKelas;
-
+    MaterialButton btnProfile,btnKelas,btnRiwayat,btnAbsensi;
+    private double longitude, latitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
         MaterialButton btnGetLocation = findViewById(R.id.DashboardPresensi);
         btnProfile = findViewById(R.id.dashboardbtnprofile);
         btnKelas = findViewById(R.id.dashboardRiwayatKelas);
+        btnRiwayat = findViewById(R.id.DashboardBtnRiwayat);
+        btnAbsensi = findViewById(R.id.DashboardPresensi);
+
+        Log.d("token", sessionManager.getString(MainActivity.this,"token",""));
 
         btnGetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +91,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnRiwayat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent In = new Intent(MainActivity.this, RiwayatPresensiSiswaActivity.class);
+                startActivity(In);
+            }
+        });
+
+        btnAbsensi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA},
+                            MY_CAMERA_PERMISSION_CODE);
+                } else {
+                    // Izin kamera sudah diberikan
+                   getLocation();
+                }
+            }
+        });
+
 
 
 
@@ -85,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 // Dapatkan nilai longitude dan latitude dari objek Location
-                double longitude = location.getLongitude();
-                double latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                latitude= location.getLatitude();
 
                 // Gunakan nilai longitude dan latitude sesuai kebutuhan Anda
                 // Misalnya, tampilkan di log atau UI
@@ -137,7 +182,13 @@ public class MainActivity extends AppCompatActivity {
                         bestLocation = l;
                     }
                 }
-                Log.d("d", "Last Known Location - Longitude: attitude"+bestLocation.getLongitude()+" "+bestLocation.getLatitude());
+                longitude = bestLocation.getLongitude();
+                latitude=bestLocation.getLatitude();
+
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
             } catch (Exception e) {
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     // Jika tidak diaktifkan, buka pengaturan lokasi untuk mengaktifkannya
@@ -178,5 +229,92 @@ public class MainActivity extends AppCompatActivity {
                         0, 0, locationListener);
             }
         }
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            // Menambahkan kata di dalam foto
+            String textToAdd = "Hello, OpenAI!";
+            Bitmap finalPhoto = addTextToBitmap(photo, textToAdd);
+
+
+            // Mengonversi foto ke Base64
+            String base64Image = bitmapToBase64(finalPhoto);
+
+            // Mengirim foto ke server
+            sendImageToServer(base64Image);
+        }
+    }
+
+    private Bitmap addTextToBitmap(Bitmap bitmap, String text) {
+        // Menggabungkan teks ke dalam foto
+        Bitmap result = bitmap.copy(bitmap.getConfig(), true);
+        // Tambahkan teks sesuai kebutuhan, misalnya di tengah atau di sudut foto
+        // ...
+
+        return result;
+    }
+
+    private String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
+    private void sendImageToServer(final String base64Image) {
+        Log.d("foto", base64Image);
+        AndroidNetworking.post(URI.url+"presensi")
+                .addBodyParameter("token",sessionManager.getString(MainActivity.this,"token",""))
+                .addBodyParameter("foto", base64Image)
+                .addBodyParameter("lat", new Double(latitude).toString())
+                .addBodyParameter("long", new Double(longitude).toString())
+                .addBodyParameter("ip", getLocalIpAddress())
+                .addBodyParameter("email", sessionManager.getString(MainActivity.this,"email",""))
+
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("anu", "onResponse: "+response);
+                        // Handle response from server if needed
+                        // ...
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        Log.d("anu", "error response: "+error.getMessage());
+
+                        System.out.println("error : "+error.getErrorBody());
+
+                        System.out.println("error : "+error.getErrorCode());
+
+                        System.out.println("error : "+error.getErrorDetail());
+                    }
+                });
+    }
+
+    public String getLocalIpAddress() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+                 en.hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress()) {
+                        String ip = Formatter.formatIpAddress(inetAddress.hashCode());
+                        Log.i("TAG", "***** IP="+ ip);
+                        return ip;
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            Log.e("", ex.toString());
+        }
+        return null;
     }
 }
