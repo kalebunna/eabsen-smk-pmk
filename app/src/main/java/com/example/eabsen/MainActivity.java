@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -32,6 +33,7 @@ import com.example.eabsen.activity.KelasPresensiActivity;
 import com.example.eabsen.activity.RiwayatPresensiSiswaActivity;
 import com.google.android.material.button.MaterialButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -270,8 +272,8 @@ public class MainActivity extends AppCompatActivity {
         AndroidNetworking.post(URI.url+"presensi")
                 .addBodyParameter("token",sessionManager.getString(MainActivity.this,"token",""))
                 .addBodyParameter("foto", base64Image)
+                .addBodyParameter("lng", new Double(longitude).toString())
                 .addBodyParameter("lat", new Double(latitude).toString())
-                .addBodyParameter("long", new Double(longitude).toString())
                 .addBodyParameter("ip", getLocalIpAddress())
                 .addBodyParameter("email", sessionManager.getString(MainActivity.this,"email",""))
 
@@ -280,9 +282,21 @@ public class MainActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("anu", "onResponse: "+response);
-                        // Handle response from server if needed
-                        // ...
+                        try {
+                            // Handle response dari server
+                            boolean success = response.getBoolean("req_status");
+                            String message = response.getString("message");
+
+                            if (success) {
+                               Toasty.success(MainActivity.this,message,Toasty.LENGTH_SHORT).show();
+                            } else {
+                                // Login gagal, tampilkan pesan error
+                                Toasty.error(MainActivity.this,message, Toast.LENGTH_SHORT,true).show();
+                            }
+                        } catch (JSONException e) {
+                            Toasty.error(MainActivity.this,"Terjadi Kesalahan", Toast.LENGTH_SHORT,true).show();
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -294,6 +308,8 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println("error : "+error.getErrorCode());
 
                         System.out.println("error : "+error.getErrorDetail());
+
+                        Toasty.error(MainActivity.this,"ERR : "+error.getErrorCode() + " | Message "+error.getErrorDetail());
                     }
                 });
     }

@@ -59,6 +59,7 @@ public class KelasActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent In = new Intent(KelasActivity.this, KelasPresensiActivity.class);
+               In.putExtra("idKelas",filteredBookList.get(i).getId());
                 startActivity(In);
             }
         });
