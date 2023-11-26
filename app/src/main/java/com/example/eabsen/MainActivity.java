@@ -21,6 +21,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -30,6 +33,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.eabsen.API.URI;
 import com.example.eabsen.activity.KelasActivity;
 import com.example.eabsen.activity.KelasPresensiActivity;
+import com.example.eabsen.activity.PengajuanIzinActivity;
 import com.example.eabsen.activity.RiwayatPresensiSiswaActivity;
 import com.google.android.material.button.MaterialButton;
 
@@ -40,11 +44,15 @@ import java.io.ByteArrayOutputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
 import com.example.eabsen.tools.sessionManager;
+import com.google.android.material.card.MaterialCardView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,8 +61,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    MaterialButton btnProfile,btnKelas,btnRiwayat,btnAbsensi;
+    MaterialButton btnProfile,btnKelas,btnRiwayat,btnAbsensi,btnPengajuanIzin;
     private double longitude, latitude;
+
+    private TextView Nama,tanggal,ucapan,email,NISN,status;
+
+    private MaterialCardView sudahAbsen,BelumAbsen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +80,19 @@ public class MainActivity extends AppCompatActivity {
         btnKelas = findViewById(R.id.dashboardRiwayatKelas);
         btnRiwayat = findViewById(R.id.DashboardBtnRiwayat);
         btnAbsensi = findViewById(R.id.DashboardPresensi);
-
-        Log.d("token", sessionManager.getString(MainActivity.this,"token",""));
-
+        btnPengajuanIzin = findViewById(R.id.dashboardbtnpengajuanizin);
+        Nama = findViewById(R.id.Dashboard_nama);
+        NISN = findViewById(R.id.dashboard_NISN);
+        email = findViewById(R.id.dashboard_email);
+        tanggal = findViewById(R.id.Dashboard_tanggal);
+        ucapan = findViewById(R.id.dashboard_ucapan);
+        sudahAbsen = findViewById(R.id.dashboard_sudaPresensi);
+        BelumAbsen =findViewById(R.id.dashboard_belumPresensi);
+status=findViewById(R.id.dashbaord_status_absen);
+        setupDashboard();
+        profileAction();
+        statusAbsen();
+        setbuttonvisible();
         btnGetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +138,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnPengajuanIzin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent In = new Intent(MainActivity.this, PengajuanIzinActivity.class);
+                startActivity(In);
+            }
+        });
 
 
 
@@ -135,9 +165,6 @@ public class MainActivity extends AppCompatActivity {
                 longitude = location.getLongitude();
                 latitude= location.getLatitude();
 
-                // Gunakan nilai longitude dan latitude sesuai kebutuhan Anda
-                // Misalnya, tampilkan di log atau UI
-                System.out.println("Longitude: " + longitude + " Latitude: " + latitude);
             }
 
             @Override
@@ -164,6 +191,17 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION_PERMISSION);
+        }
+    }
+
+    private void setbuttonvisible() {
+        if (sessionManager.getString(MainActivity.this,"role","").equalsIgnoreCase("guru")){
+            btnAbsensi.setVisibility(View.GONE);
+            btnRiwayat.setVisibility(View.GONE);
+            btnRiwayat.setVisibility(View.GONE);
+            btnPengajuanIzin.setVisibility(View.GONE);
+        }else{
+            btnKelas.setVisibility(View.GONE);
         }
     }
 
@@ -332,5 +370,133 @@ public class MainActivity extends AppCompatActivity {
             Log.e("", ex.toString());
         }
         return null;
+    }
+
+
+    private void profileAction() {
+        AndroidNetworking.post(URI.url + "profile")
+                .addBodyParameter("token", sessionManager.getString(MainActivity.this, "token", ""))
+                .addBodyParameter("email", sessionManager.getString(MainActivity.this, "email", ""))
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Handle response dari server
+                            boolean success = response.getBoolean("req_status");
+                            String message = response.getString("message");
+
+                            if (success) {
+                                JSONObject data = response.getJSONObject("data");
+                                Nama.setText(data.getString("namaLengkap"));
+                                if (sessionManager.getString(MainActivity.this,"role","").equalsIgnoreCase("guru")){
+                                    NISN.setText(data.getString("nip"));
+                                }else{
+
+                                NISN.setText(data.getString("nisn"));
+
+                                }
+                                email.setText(sessionManager.getString(MainActivity.this,"email",""));
+
+                            } else {
+                                // Login gagal, tampilkan pesan error
+                                Toasty.error(MainActivity.this, message, Toast.LENGTH_SHORT, true).show();
+                            }
+                        } catch (JSONException e) {
+                            Toasty.error(MainActivity.this, "Terjadi Kesalahan", Toast.LENGTH_SHORT, true).show();
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Toasty.error(MainActivity.this, anError.getErrorCode() + ": Terjadi Kesalahan", Toast.LENGTH_SHORT, true);
+                    }
+
+                });
+    }
+
+    private  void setupDashboard (){
+        Date currentDate = new Date();
+
+        // Membuat objek SimpleDateFormat dengan format yang diinginkan
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", new Locale("id", "ID"));
+
+        // Memformat tanggal dan waktu sesuai dengan format yang telah ditentukan
+        String formattedDate = sdf.format(currentDate);
+
+        // Menampilkan hasil pada TextView atau tempat lain yang sesuai
+
+        tanggal.setText(formattedDate);
+
+        SimpleDateFormat sdf2 = new SimpleDateFormat("HH", Locale.getDefault());
+        int currentHour = Integer.parseInt(sdf2.format(currentDate));
+
+        // Menentukan ucapan berdasarkan waktu
+        String greeting;
+        if (currentHour >= 5 && currentHour < 12) {
+            greeting = "Selamat Pagi!";
+        } else if (currentHour >= 12 && currentHour < 17) {
+            greeting = "Selamat Siang!";
+        } else {
+            greeting = "Selamat Malam!";
+        }
+
+        // Menampilkan ucapan pada TextView
+        ucapan.setText(greeting);
+
+    }
+
+    private void statusAbsen(){
+        if (sessionManager.getString(MainActivity.this,"role","").equalsIgnoreCase("guru")){
+
+        }else{
+
+        AndroidNetworking.post(URI.url + "status-absen-today")
+                .addBodyParameter("token", sessionManager.getString(MainActivity.this, "token", ""))
+                .addBodyParameter("email", sessionManager.getString(MainActivity.this, "email", ""))
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.d("login", "onResponse: "+response);
+                            // Handle response dari server
+                            boolean success = response.getBoolean("req_status");
+                            String message = response.getString("message");
+
+                            if (success) {
+                                JSONObject data = response.getJSONObject("data");
+                                Log.d("dd", "onResponse: "+data);
+                                if (data.getString("status").equalsIgnoreCase("")){
+                                    BelumAbsen.setVisibility(View.VISIBLE);
+                                    sudahAbsen.setVisibility(View.GONE);
+                                }else {
+                                    sudahAbsen.setVisibility(View.VISIBLE);
+                                    status.setText(data.getString("status"));
+                                    BelumAbsen.setVisibility(View.GONE);
+                                }
+
+                            } else {
+                                // Login gagal, tampilkan pesan error
+                                Toasty.error(MainActivity.this, message, Toast.LENGTH_SHORT, true).show();
+                            }
+                        } catch (JSONException e) {
+                            Toasty.error(MainActivity.this, "Terjadi Kesalahan", Toast.LENGTH_SHORT, true).show();
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d("err", "onError: "+anError.getErrorBody());
+                        Toasty.error(MainActivity.this, anError.getErrorCode() + ": Terjadi Kesalahan", Toast.LENGTH_SHORT, true).show();
+                    }
+
+                });
+        }
+
     }
 }

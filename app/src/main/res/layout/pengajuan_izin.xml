@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="29dp">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,7 +54,7 @@
     </androidx.cardview.widget.CardView>
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/PengajuancheckboxIzin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Ajukan Izin Sakit" />
@@ -58,11 +65,13 @@
         android:orientation="vertical"
         >
         <EditText
+            android:id="@+id/pengajuanIzinKeterangan"
             android:hint="Tulis Keterangan Izin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/pengajuanbtnPilihFOto"
             android:backgroundTint="@color/warningColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,13 +79,24 @@
             app:cornerRadius="10dp"
             />
 
+        <ImageView
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:id="@+id/pengajuanGambarIjin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <com.google.android.material.button.MaterialButton
+
             android:backgroundTint="@color/my_primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Kirim"
             app:cornerRadius="10dp"
-            android:id="@+id/loginBtnLogin"
+            android:id="@+id/pengajuanbtnKirim"
             />
+
     </LinearLayout>
+    </LinearLayout>
+</ScrollView>
 </LinearLayout>
