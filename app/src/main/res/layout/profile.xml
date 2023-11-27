@@ -341,7 +341,9 @@
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/infoColor"
                 android:text="RESET PASSWORD"
-                app:cornerRadius="10dp" />
+                app:cornerRadius="10dp"
+                android:id="@+id/profile_resetPassowrd"
+                />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/profileLogout"

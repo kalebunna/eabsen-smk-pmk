@@ -1,12 +1,14 @@
 package com.example.eabsen;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -30,6 +32,7 @@ public class Login extends AppCompatActivity {
         private EditText username,password;
         private MaterialButton btnLogin;
 
+        private TextView forget_password;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +41,22 @@ public class Login extends AppCompatActivity {
         username = findViewById(R.id.loginUsename);
         password = findViewById(R.id.loginPassword);
         btnLogin = findViewById(R.id.loginBtnLogin);
+        forget_password = findViewById(R.id.login_forget_password);
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loginAction();
+            }
+        });
+
+        forget_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse(URI.link+"forgot-password"); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
             }
         });
 
