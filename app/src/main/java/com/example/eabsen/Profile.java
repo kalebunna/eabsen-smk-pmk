@@ -1,6 +1,7 @@
 package com.example.eabsen;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +30,7 @@ public class Profile extends AppCompatActivity {
     TextView NIK, Namalengkap, tetala, gender, NISN;
     EditText Email, Username;
 
-    MaterialButton btnLogout, btnUpdate;
+    MaterialButton btnLogout, btnUpdate,resetPassword;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class Profile extends AppCompatActivity {
         Username = findViewById(R.id.profileUsename);
         btnLogout = findViewById(R.id.profileLogout);
         btnUpdate = findViewById(R.id.profilebtnupdate);
+        resetPassword =findViewById(R.id.profile_resetPassowrd);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +65,16 @@ public class Profile extends AppCompatActivity {
                 String username = Username.getText().toString();
                 updateProfileAction(edit_email, username);
 
+            }
+        });
+
+        resetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Uri uri = Uri.parse(URI.link+"forgot-password"); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
             }
         });
 
