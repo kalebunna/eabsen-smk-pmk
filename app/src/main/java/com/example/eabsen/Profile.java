@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,8 @@ public class Profile extends AppCompatActivity {
 
     MaterialButton btnLogout, btnUpdate,resetPassword;
 
+    ImageView btn_close;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +49,8 @@ public class Profile extends AppCompatActivity {
         Username = findViewById(R.id.profileUsename);
         btnLogout = findViewById(R.id.profileLogout);
         btnUpdate = findViewById(R.id.profilebtnupdate);
-        resetPassword =findViewById(R.id.profile_resetPassowrd);
+        resetPassword = findViewById(R.id.profile_resetPassowrd);
+        btn_close = findViewById(R.id.profile_btn_close);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +79,13 @@ public class Profile extends AppCompatActivity {
                 Uri uri = Uri.parse(URI.link+"forgot-password"); // missing 'http://' will cause crashed
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
+            }
+        });
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 

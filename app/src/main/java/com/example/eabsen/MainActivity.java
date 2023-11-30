@@ -1,17 +1,23 @@
 package com.example.eabsen;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.format.Formatter;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -39,6 +45,7 @@ import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.net.InetAddress;
@@ -49,6 +56,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.zip.Inflater;
 
 import es.dmoral.toasty.Toasty;
 import com.example.eabsen.tools.sessionManager;
@@ -64,10 +72,17 @@ public class MainActivity extends AppCompatActivity {
     MaterialButton btnProfile,btnKelas,btnRiwayat,btnAbsensi,btnPengajuanIzin;
     private double longitude, latitude;
 
-    private TextView Nama,tanggal,ucapan,email,NISN,status;
+    private TextView Nama,tanggal,ucapan,email,NISN,status,ip;
 
     private MaterialCardView sudahAbsen,BelumAbsen;
 
+    private AlertDialog.Builder dialog;
+    private AlertDialog  alert;
+
+    private LayoutInflater inflater;
+
+    private View dialogView;
+    private EditText dialog_emal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +103,12 @@ public class MainActivity extends AppCompatActivity {
         ucapan = findViewById(R.id.dashboard_ucapan);
         sudahAbsen = findViewById(R.id.dashboard_sudaPresensi);
         BelumAbsen =findViewById(R.id.dashboard_belumPresensi);
-status=findViewById(R.id.dashbaord_status_absen);
+        status=findViewById(R.id.dashbaord_status_absen);
+        ip = findViewById(R.id.dashboard_ip);
+
+
+        ip.setText("IP anda = "+getLocalIpAddress());
+
         setupDashboard();
         profileAction();
         statusAbsen();
@@ -133,7 +153,10 @@ status=findViewById(R.id.dashbaord_status_absen);
                             MY_CAMERA_PERMISSION_CODE);
                 } else {
                     // Izin kamera sudah diberikan
-                   getLocation();
+                    //skrip untuk absen
+                 //  getLocation();
+
+                    DialogForm();
                 }
             }
         });
@@ -192,6 +215,48 @@ status=findViewById(R.id.dashbaord_status_absen);
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION_PERMISSION);
         }
+    }
+
+    private void DialogForm(){
+        dialog =  new AlertDialog.Builder((MainActivity.this));
+        inflater = getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.form_insert_email,null);
+        dialog.setView(dialogView);
+        dialog.setCancelable(true);
+        dialog.setIcon(R.drawable.smk3pmk);
+        dialog.setTitle("Masukkan Email");
+
+        dialog_emal = (EditText) dialogView.findViewById(R.id.dialog_email);
+        TextView error_text  = (TextView) dialogView.findViewById(R.id.dialog_warning);
+        dialog.setPositiveButton("Absen Sekarang !", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String enteredEmail = dialog_emal.getText().toString();
+                String storedEmail = sessionManager.getString(MainActivity.this, "email", "");
+
+                  if (enteredEmail.equals(storedEmail)){
+                      getLocation();
+                      Log.d("enterd email true", "onClick: "+enteredEmail);
+                      Log.d("stored email true", "onClick: "+storedEmail);
+
+                      dialogInterface.dismiss();
+                }else{
+                      Log.d("enterd email false", "onClick: "+enteredEmail);
+                      Log.d("stored email false", "onClick: "+storedEmail);
+                      DialogForm();
+                      Toasty.error(MainActivity.this,"Email Tidak Dikenal",Toast.LENGTH_LONG,true).show();
+                }
+            }
+        });
+
+        dialog.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void setbuttonvisible() {
@@ -326,6 +391,7 @@ status=findViewById(R.id.dashbaord_status_absen);
                             String message = response.getString("message");
 
                             if (success) {
+                                statusAbsen();
                                Toasty.success(MainActivity.this,message,Toasty.LENGTH_SHORT).show();
                             } else {
                                 // Login gagal, tampilkan pesan error
@@ -353,23 +419,26 @@ status=findViewById(R.id.dashbaord_status_absen);
     }
 
     public String getLocalIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-                 en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        String ip = Formatter.formatIpAddress(inetAddress.hashCode());
-                        Log.i("TAG", "***** IP="+ ip);
-                        return ip;
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            Log.e("", ex.toString());
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(MainActivity.this.WIFI_SERVICE);
+        if (wifiManager != null && wifiManager.isWifiEnabled()) {
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            int ipAddress = wifiInfo.getIpAddress();
+
+            // Format the IP address
+            String ipAddressString = String.format(
+                    "%d.%d.%d.%d",
+                    (ipAddress & 0xff),
+                    (ipAddress >> 8 & 0xff),
+                    (ipAddress >> 16 & 0xff),
+                    (ipAddress >> 24 & 0xff)
+            );
+
+            // Display the IP address
+          return ipAddressString;
+        } else {
+            return "0.0.0.0";
         }
-        return null;
+
     }
 
 
